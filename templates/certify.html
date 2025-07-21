@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}工人认证{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-patch-check"></i> 认证工人: {{ worker.username }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">工人信息</label>
+                        <div class="card bg-light p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>用户名:</strong> {{ worker.username }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>账户创建:</strong> {{ worker.created_at.strftime('%Y-%m-%d') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="certificate_data" class="form-label">认证书内容</label>
+                        <textarea class="form-control" id="certificate_data" name="certificate_data" 
+                                  rows="5" placeholder="输入证书内容...">兹证明 {{ worker.username }} 已完成铜水管安装专业培训，符合行业标准要求。</textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> 
+                            证书有效期为1年，系统将自动生成唯一证书编号
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-lg btn-success">
+                            <i class="bi bi-check-circle"></i> 确认认证
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> 重要注意事项</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>请仔细核对工人信息，确保无误</li>
+                    <li>认证后工人将获得系统访问权限</li>
+                    <li>同一工人只能存在一个有效认证</li>
+                    <li>认证后将不能修改工人类型</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

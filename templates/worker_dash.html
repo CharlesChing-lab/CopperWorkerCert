@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}工人控制面板{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-person"></i> 工人控制面板</h2>
+    <div class="text-end">
+        <span class="me-3">状态: 
+            {% if worker_info.status == 'certified' %}
+            <span class="badge bg-success">已认证</span>
+            {% else %}
+            <span class="badge bg-warning text-dark">待认证</span>
+            {% endif %}
+        </span>
+        <span>用户名: {{ worker_info.username }}</span>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> 我的认证证书</h5>
+            </div>
+            <div class="card-body">
+                {% if certificates %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>证书编号</th>
+                                <th>发证日期</th>
+                                <th>有效期至</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cert in certificates %}
+                            <tr>
+                                <td>{{ cert.verification_code }}</td>
+                                <td>{{ cert.issue_date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ cert.expiry_date.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    {% if cert.expiry_date < today %}
+                                    <span class="badge bg-danger">已过期</span>
+                                    {% else %}
+                                    <span class="badge bg-success">有效</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/certificate/{{ cert.verification_code }}" 
+                                       class="btn btn-sm btn-primary me-1">
+                                        <i class="bi bi-eye"></i> 查看
+                                    </a>
+                                    <a href="/download_certificate/{{ cert.verification_code }}" 
+                                       class="btn btn-sm btn-success">
+                                        <i class="bi bi-download"></i> 下载
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    您还没有任何认证证书，请联系管理员进行认证
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> 我的信息</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                         style="width: 80px; height: 80px; font-size: 2rem;">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+                
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>用户名:</span>
+                        <span class="fw-bold">{{ worker_info.username }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>账户类型:</span>
+                        <span class="fw-bold">{{ worker_info.role }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>账户状态:</span>
+                        <span class="fw-bold">
+                            {% if worker_info.status == 'certified' %}
+                                <span class="badge bg-success">已认证</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">待认证</span>
+                            {% endif %}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>注册日期:</span>
+                        <span class="fw-bold">{{ worker_info.created_at.strftime('%Y-%m-%d') }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-shield-check"></i> 铜水管工认证说明</h5>
+            </div>
+            <div class="card-body">
+                <p>铜水管工认证要求申请人具备以下条件：</p>
+                <ul>
+                    <li>完成至少200小时的铜管安装实践</li>
+                    <li>通过专业理论和实践考试</li>
+                    <li>具备3年以上相关工作经验</li>
+                    <li>遵守行业安全规范</li>
+                </ul>
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-circle"></i> 
+                    认证有效期为1年，请及时更新
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 设置今天日期用于比较证书状态
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('.cert-expiry').forEach(elem => {
+        const expiryDate = elem.getAttribute('data-expiry');
+        if (expiryDate < today) {
+            elem.classList.add('bg-danger', 'text-white');
+        }
+    });
+});
+</script>
+{% endblock %}

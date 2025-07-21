@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}证书查询结果{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h4 class="mb-0"><i class="bi bi-search"></i> 证书查询</h4>
+            </div>
+            <div class="card-body">
+                <form action="/search" method="get" class="d-flex mb-4">
+                    <input type="text" name="q" class="form-control me-2" 
+                           placeholder="输入证书编号或工人名称..." value="{{ query }}">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </form>
+                
+                {% if results %}
+                <div class="alert alert-info">
+                    找到 {{ results|length }} 条匹配记录
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>工人名称</th>
+                                <th>证书编号</th>
+                                <th>发证日期</th>
+                                <th>有效期至</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in results %}
+                            <tr>
+                                <td>{{ result.username }}</td>
+                                <td>{{ result.verification_code }}</td>
+                                <td>{{ result.issue_date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ result.expiry_date.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    {% if result.status == 'certified' %}
+                                        <span class="badge bg-success">已认证</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">待认证</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/certificate/{{ result.verification_code }}" 
+                                       class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> 查看
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i>
+                    没有找到匹配的证书信息
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

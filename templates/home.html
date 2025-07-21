@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}首页{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <div class="card bg-light py-4">
+            <h1 class="text-primary mb-3"><i class="bi bi-wrench"></i> 铜水管工认证系统</h1>
+            <p class="lead">专业的铜水管工认证管理平台，提供认证、查询和管理功能</p>
+            
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="bi bi-person-plus fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title">工人认证</h5>
+                            <p class="card-text">对铜水管工人进行专业资格认证，确保工作质量</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="bi bi-search fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title">证书查询</h5>
+                            <p class="card-text">通过证书编号快速验证工人资质</p>
+                            <a href="/search" class="btn btn-sm btn-outline-primary">开始查询</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title">系统管理</h5>
+                            <p class="card-text">管理员统一管理认证信息和用户账户</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="/search" class="btn btn-primary btn-lg me-2">
+                    <i class="bi bi-search"></i> 查询证书
+                </a>
+                {% if not session.user_id %}
+                <a href="/login" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> 登录系统
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="mb-3">系统使用说明</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="bi bi-person-check"></i> 工人用户</h5>
+                        <ul>
+                            <li>登录后查看自己的认证信息</li>
+                            <li>下载认证证书</li>
+                            <li>查看证书有效期</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="bi bi-person-gear"></i> 管理员</h5>
+                        <ul>
+                            <li>添加新的工人账户</li>
+                            <li>对工人进行专业认证</li>
+                            <li>管理所有认证信息</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
