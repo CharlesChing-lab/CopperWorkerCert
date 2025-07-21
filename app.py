@@ -6,7 +6,8 @@ import string
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-app.secret_key = 'copper_secret_key_@!2023'
+#app.secret_key = 'copper_secret_key_@!2023'
+app.secret_key = os.environ['SECRET_KEY']
 
 # MySQL配置
 app.config['MYSQL_HOST'] = 'localhost'
